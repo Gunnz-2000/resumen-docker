@@ -1,0 +1,26 @@
+Se necesita crear un imagen Docker que ejecute automáticamente un script
+de Python, de manera que el código pueda correr dentro de un contenedor
+sin depender del entorno del host. Para ello, crea un script llamado
+saludo.py que imprima el mensaje "Mi primer script en Docker", define
+un Dockerfile que use una imagen base de Python, copie el script al
+contenedor y lo ejecute al iniciar, construye la imagen Docker y
+ejecuta un contenedor a partir de ella. El resultado esperado es que
+al correr el contenedor, se muestre el mensaje del script en la consola
+y el contenedor se elimine automáticamente si se utiliza la opción
+correspondiente, demostrando que el contenedor ejecuta código Python
+de manera independiente y reproducible.
+
+Primer paso: Crear el script de Python
+Segundo paso: Crear el Dockerfile
+Tercer paso: Construir la imagen Docker
+docker build -t mi-python .
+  docker build: comando para construir una imagen Docker
+  -t: etiqueta para identificar la imagen
+  mi-python: nombre que se le da a la imagen
+  .: indica que el contexto de build es el directorio actual
+
+Cuarto paso: Ejecutar el contenedor
+docker run --rm mi-python
+  docker run: comando para ejecutar un contenedor
+  --rm: indica que el contenedor se elimine automaticamente al finalizar
+  mi-python: imagen a utilizar

@@ -7,3 +7,7 @@ node_modules/
 venv/
 .env
 
+# Caché de Python
+__pycache__/
+*.py[cod]
+*$py.class

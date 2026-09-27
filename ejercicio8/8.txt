@@ -1,0 +1,27 @@
+Se necesita desplegar una aplicación backend que se contecte a una base de datos
+PostgreSQL en Docker, simulando un entorno de red privada de manera que los contenedores
+puedan comunicarse entre sí usando nombres lógicas. Para resolverlo, crea una red Docker
+privada, lanza un contenedor con PostgreSQL conectado a esa red y con la contraseña del 
+usuario configurada, y luego verifica la conectividad creando un contenedor temporal en
+la misma red que haga ping al contenedor de PostgreSQL. El resultado esperado es que el
+nombre del contenedor de la base de datos se resuelva automáticamente dentro de la red y
+que se pueda comunicar, demostrando que el DNS interno de Docker funciona correctamente.
+
+Primer paso: crear la red
+docker network create app-net
+
+Segundo paso: crear contenedor conectada a la red recién creada
+docker run -d --name postgres-prueba --network app-net -e POSTGRES_PASSWORD=mi-clave postgres:14-alpine
+
+Tercer paso: crear otro contenedor pero temporal conectado a la misma red
+docker run -it --rm --network app-net alpine sh
+
+Cuarto paso: instalar ping dentro del contenedor temporal
+apk add --no-cache iputils
+
+Quinto paso: ping al contenedor de postgres para verificar la red
+ping postgres-prueba
+
+Sexto paso: salir del contenedor temporal
+control+c
+exit

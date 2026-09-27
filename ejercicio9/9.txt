@@ -1,0 +1,24 @@
+Se necesita desplegar una aplicación web completa usando Docker Compose,
+integrando un backend en Flask y un frontend Nginx como proxy inverso,
+de manera que los contenedores se comuniquen entre sí automáticamente y
+el frontend reciba y reenvíe las solicitudes al backend. Para resolverlo
+configura un proyecto con la estructura adecuada, crea el backend con Flask
+escuchando en el puerto 5000, define un Dockerfile para instalar dependencias
+y ejecutar la app, configuran Nginx para que actúe como proxy inverso apuntando
+al backend, y define un archivo docker-compose.yml que levante ambos servicios
+asegure que el backend se inicie antes que el frontend y exponga el puerto 80
+al host. El resultado esperado es que al ejecutar docker compose up, se pueda
+acceder desde el navegador a http://localhost:80 y la respuesta provenga correctamente
+del backend Flask a través de Nginx, demostrando comunicación entre contenedores
+y orquestación completa con Docker Compose.
+
+Primer paso: estructura adecuada
+├── backend
+│   ├── app.py
+│   └── Dockerfile
+├── frontend
+│   ├── nginx.conf
+└── docker-compose.yml
+
+Segundo paso: ejecutar 
+docker compose up

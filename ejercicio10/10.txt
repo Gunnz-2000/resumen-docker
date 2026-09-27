@@ -1,0 +1,23 @@
+Se necesita desplegar una aplicación web Flask que se conecte a un servicio Redis
+utilizando Docker Compose, de manera que ambos contenedores puedan conunicarse
+automáticamente y persistir los datos del contador de visitas. Para resolverlo,
+define los servicios en un archivo docker-compose.yml, construye el contenedor
+de Flask a partir de una imagen base de Python con sus dependencias instaladas,
+expón el puerto 5000 y configura las variables de entorno necesarias para conectarse
+a Redis, lanza un contenedor Redis con un volumen para guardar los datos y asegúrate
+de que Flask dependa de Redis. El resultado esperado es que al acceder a la aplicación
+desde el navegador, se incremente un contador de visitas almacenado en Redis y que ambos
+contenedores puedan iniciarse, detenerse y eliminarse correctamente mediante Docker Compose,
+demostrando comunicación entre servicios y persistencia de datos.
+
+Primer paso: creación de archivos correspondientes
+
+Segundo paso: construir imágenes de servicios y levantar contenedores
+docker compose up --build
+    --build: Fuerza a Docker a construir las imágenes antes de iniciar los contenedores.
+
+Tercer paso: detener y eliminar contenedores
+docker compose down
+
+
+    

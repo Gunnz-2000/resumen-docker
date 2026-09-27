@@ -1,0 +1,35 @@
+Se necesita desplegar una aplicación web FastAPI dentro de un contenedor Docker,
+accesible desde el navegador o mediante clientes HTTP en el puerto 8000,
+incluyendo todas sus dependencias sin afectar el host. Para ello, crea un contenedor
+usando la imagen base de Python 3.9 slim, configura el directorio de trabajo, copia e instala las
+dependencias listadas en un archivo requirements.txt,agrega el código de la aplicación
+FastAPI, expón el puerto correspondiente y define el comando de ejecución con Uvicorn. El resultado
+esperado es que al acceder a la ruta raiz de la aplicación (/), se reciba la respuesta
+{"message":"Hola! Esta es una aplicacion FastAPI corriendo en Docker"} y que el contenedor
+pueda iniciarse, detenerse y eliminarse correctamente.
+
+Primer paso: Crear el script de Python
+Segundo paso: Crear el archivo requirements.txt
+Tercer paso: Crear el Dockerfile
+Cuarto paso: Construir la imagen Docker
+docker build -t fastapi-app .
+  docker build: comando para construir una imagen Docker
+  -t: etiqueta para identificar la imagen
+  fastapi-app: nombre que se le da a la imagen
+  .: indica que el contexto de build es el directorio actual
+
+Quinto paso: Ejecutar el contenedor
+docker run --name mi-fastapi -p 8000:8000 fastapi-app
+  docker run: comando para ejecutar un contenedor
+  --name: nombre que se le da al contenedor
+  -p: mapea el puerto del host al puerto del contenedor
+  8000:8000: mapea el puerto 8000 del host al puerto 8000 del contenedor
+  fastapi-app: imagen a utilizar
+
+Sexto paso: Detener el contenedor
+control + c
+
+Séptimo paso: Eliminar el contenedor
+docker rm mi-fastapi
+  docker rm: comando para eliminar un contenedor
+  mi-fastapi: nombre del contenedor a eliminar

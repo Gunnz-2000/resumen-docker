@@ -1,0 +1,15 @@
+Se necesita crear un entorno de desarrollo profesional para una aplicación Node.js
+utilizando Docker y Nodemon, de manera que el código se ejecute dentro del contenedor,
+los cambios locales se reflejen automáticamente(hot reload) y no sea necesario instalar
+node ni dependencias globales en el host. Para resolverlo,define un servicio en Docker
+Compose usando la imagen de Node.js, monta el código local como volumen,asegura que
+node_modules se mantenga dentro del contenedor,expón el puerto 3000 y ejecuta el comando
+que instale dependencias y arranqe Nodemon. El resultado esperado es que al acceder
+a http://localhost:3000 se vea el mensaje de bienvenida, cualquier cambio en el archivo
+server.js reinicie automáticamente el servidor dentro del contenedor y todo funcione
+sin afectar el sistema local.
+
+Primer paso: creación de archivos correspondientes
+
+Segundo paso: ejecutar el contenedor
+docker compose up

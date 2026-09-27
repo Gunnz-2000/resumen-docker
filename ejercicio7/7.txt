@@ -1,0 +1,41 @@
+Se necesita asegurar la persistencia de datos en una base de datos MySQL ejecutada
+en Docker, de manera que la información no se pierda al detener o eliminar el contenedor.
+Para resolverlo, crea un volumen para almacenar los datos de MySQL, ejecuta un contenedor
+con la imagen oficial de MySQL montando ese volumen definiendo la contraseña del usuario
+root mediante una variable de entorno, y luego verifica que al detener y eliminar el contenedo,
+al recrearlo los datos, tablas y registros sigan intactos. El resultado esperado es que
+las bases de datos permanezcan accesibles y consistentes mientras el volumen exista, garantizando
+persistencia de la información.
+
+Primer paso: crea un volumen para almacenar los datos de MySQL
+docker volume create datos-mysql
+
+Segundo paso: crear el contenedor
+docker run -d --name mysql-prueba -e MYSQL_ROOT_PASSWORD=mi-clave -v datos-mysql:/var/lib/mysql mysql:8.0
+    -d: ejecuta el contenedor en segundo plano
+    --name mysql-prueba: nombre del contenedor
+    -e MYSQL_ROOT_PASSWORD=mi-clave: contraseña del usuario root
+    -v datos-mysql:/var/lib/mysql: volumen
+    mysql:8.0: imagen de MySQL
+
+Tercer paso: entrar a la terminal de mysql
+docker exec -it mysql-prueba mysql -u root -p
+
+Cuarto paso: crear base de datos
+CREATE DATABASE mi_base;
+USE mi_base;
+CREATE TABLE IF NOT EXISTS usuarios (id INT AUTO_INCREMENT PRIMARY KEY, nombre VARCHAR(50),email VARCHAR(100));
+INSERT INTO usuarios (nombre,email) VALUES ('Juan','juan@gmail.com'),('Maria','maria@gmail.com');
+
+Quinto paso: eliminar el contenedor
+docker rm -f mysql-prueba
+    -f: fuerza la eliminación del contenedor
+
+Sexto paso: crear el contenedor nuevo
+docker run -d --name mysql-prueba2 -e MYSQL_ROOT_PASSWORD=mi-clave -v datos-mysql:/var/lib/mysql mysql:8.0
+    -d: ejecuta el contenedor en segundo plano
+    --name mysql-prueba: nombre del contenedor
+    -e MYSQL_ROOT_PASSWORD=mi-clave: contraseña del usuario root
+    -v datos-mysql:/var/lib/mysql: volumen
+    mysql:8.0: imagen de MySQL
+

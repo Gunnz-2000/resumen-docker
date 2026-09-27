@@ -1,0 +1,35 @@
+Se necesita desplegar una aplicación web Flask dentro de un contenedor Docker,
+accesible desde el navegador en el puerto 5000, incluyendo todas sus dependencias
+sin afectar el host. Para ello, crea un contenedor usando la imagen base
+de Python 3.9 slim, configura el directorio de trabajo, copia e instala las
+dependencias listadas en un archivo requirements.txt,agrega el código de la aplicación
+Flask, expón el puerto correspondiente y define el comando de ejecución. El resultado
+esperado es que al acceder desde el navegador a la dirección del host y puerto
+asignado, se muestre un mensaje "¡Hola! Esta es una aplicación Flask corriendo en Docker"
+y que el contenedor pueda ejecutarse,detenerse y eliminarse correctamente.
+
+Primer paso: Crear el script de Python
+Segundo paso: Crear el archivo requirements.txt
+Tercer paso: Crear el Dockerfile
+Cuarto paso: Construir la imagen Docker
+docker build -t flask-app .
+  docker build: comando para construir una imagen Docker
+  -t: etiqueta para identificar la imagen
+  flask-app: nombre que se le da a la imagen
+  .: indica que el contexto de build es el directorio actual
+
+Quinto paso: Ejecutar el contenedor
+docker run --name mi-flask -p 5000:5000 flask-app
+  docker run: comando para ejecutar un contenedor
+  --name: nombre que se le da al contenedor
+  -p: mapea el puerto del host al puerto del contenedor
+  5000:5000: mapea el puerto 5000 del host al puerto 5000 del contenedor
+  flask-app: imagen a utilizar
+
+Sexto paso: Detener el contenedor
+control + c
+
+Séptimo paso: Eliminar el contenedor
+docker rm mi-flask
+  docker rm: comando para eliminar un contenedor
+  mi-flask: nombre del contenedor a eliminar

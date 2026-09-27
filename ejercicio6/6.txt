@@ -1,0 +1,32 @@
+Se necesita trabajar con volúmenes en Docker para almacenar datos de manera persistente
+aunque los contenedores se eliminen. Para ello, crea un contenedor de Ubuntu con un
+volumen, guarda un archivo dentro del volumen, cierra y elimina el contenedor,
+y luego crea un nuevo contenedor reutilizando el mismo volumen para verificar que
+el archivo persiste. El resultado esperado es que los datos guardados en el volumen 
+permanezcan accesibles incluso después de eliminar el primer contenedor.
+
+Primer paso: Crear un contenedor de Ubuntu con un volumen
+docker run -it --name mi-ubuntu-con-volumen -v mis-datos-db:/app/data ubuntu
+  docker run: comando para ejecutar un contenedor
+  -it: opción interactiva que permite acceder a la terminal del contenedor
+  --name: nombre que se le da al contenedor
+  -v: opción para crear un volumen
+  mis-datos-db: nombre del volumen
+  /app/data: directorio dentro del contenedor donde se guardarán los datos
+  ubuntu: imagen a utilizar
+
+Segundo paso: Guardar un archivo dentro del volumen
+echo "Este es un dato persistente" > /app/data/mi_archivo.txt
+
+Tercer paso: Salir del contenedor
+exit
+
+Cuarto paso: Eliminar el contenedor
+docker rm -f mi-ubuntu-con-volumen
+
+Quinto paso: Crear un nuevo contenedor reutilizando el mismo volumen
+docker run -it --name mi-ubuntu-con-volumen-2 -v mis-datos-db:/app/data ubuntu
+
+
+Sexto paso: Verificar que el archivo persiste
+cat /app/data/mi_archivo.txt

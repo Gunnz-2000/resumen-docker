@@ -1,0 +1,53 @@
+Se necesita automatizar el proceso de construcción y despliegue de una aplicación
+Node.js usando Docker en un pipeline CI/CD con GitHub Actions y Docker Hub, de manera
+que la imagen resultante sea inmutable y reproducible, y se pueda ejecutar en cualquiera
+máquina sin instalar dependencias locales. Para resolverlo, crea un proyecto mínimo de Node.js
+con un servidor básico, define un Dockerfile que construya la imagen con todas las dependencias
+sube el proyecto a GitHub y configura un workflow que haga checkout del código, loguee en Docker
+Hub usando secrets, construya la imagen y la publique en tu repositorio de Docker Hub. El resultado
+esperado es que tras hacer un push a la rama principal, la acción CI se ejecute correctamente, la
+imagen se suba al repositorio y al ejecutarla en cualquier máquina se muestre el mensahe del 
+servidor, demostrando un flujo completo de CI/CD en Docker.
+
+Primer paso: crear archivos
+
+Segundo paso: crear la imagen local
+docker build -t docker-ci-demo .
+
+Tercer paso: crear un contenedor con la imagen
+docker run -p 3000:3000 docker-ci-demo
+
+Cuarto paso: iniciar git y subir a github
+
+Quinto paso: tener secrets en github
+DOCKERHUB_USERNAME
+DOCKERHUB_TOKEN
+
+Quinto paso: ir a github Actions y configurar el docker image:
+name: Docker CI
+on:
+  push:
+    branches: [ "main" ]
+
+
+jobs:
+
+  build-and-push:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Código
+      uses: actions/checkout@v4
+      
+    - name: Login Docker Hub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+    - name: Build Imagen
+      run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/docker-ci-demo:latest .
+
+    - name: Push Imagen
+      run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/docker-ci-demo:latest

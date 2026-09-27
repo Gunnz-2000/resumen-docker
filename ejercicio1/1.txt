@@ -1,0 +1,24 @@
+Se necesita levantar un servidor web Nginx usando docker,accesible desde el navegador, sin afectar el host,
+y poder gestionar su contenedor fácilmente: crear y ejecutar el contenedor con nombre
+y puerto mapeado, verificar que esté activo, acceder desde el navegador,detenerlo y finalmente eliminarlo.
+El resultado esperado es que Nginx funcione correctamente, sea acesible y el contenedor pueda detenerse y eliminares sin problemas.
+
+Primer paso: Levantar Nginx
+docker run --name mi-nginx -p 8080:80 -d nginx
+  docker run: ejecuta un contenedor
+  --name mi-nginx: nombre del contenedor
+  -p 8080:80: mapea el puerto 80 del contenedor al puerto 8080 del host
+  -d: ejecuta el contenedor en segundo plano
+  nginx: imagen de Nginx
+
+Segundo paso: Verificar contenedores activos
+docker ps
+
+Tercer paso: Acceder en el navegador
+localhost:8080
+
+Cuarto paso: Detener el contenedor
+docker stop mi-nginx
+
+Quinto paso: Eliminar el contenedor
+docker rm mi-nginx

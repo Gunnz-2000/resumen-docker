@@ -1,0 +1,43 @@
+Se necesita aprender a usar contenedores Docker de manera interactiva para ejecutar
+comandos básicos en un entorno Linux sin afectar el sistema host. Para ello,
+inicia un contenedor Ubuntu 20.04 en modo interactivo, actualiza la lista de paquetes,
+instala un editor de texto, crea un archivo llamado hola.txt con contenido dentro del
+contenedor, verifica su contenido y finalmente cierra y elimina el contendor, El 
+resultado esperado es que todos los comandos se ejecuten correctamente dentro del
+contenedor, el archivo se cree con éxito y el contenedor se elimine sin dejar
+residuos en el host.
+
+Primer paso: Iniciar el contenedor
+docker run -it --name mi-ubuntu ubuntu:20.04 bash
+  -d: ejecuta el contenedor en segundo plano
+  -i: modo interactivo
+  -t: asigna una terminal
+  --name mi-ubuntu: nombre del contenedor
+  ubuntu:20.04: imagen de Ubuntu 20.04
+  bash: comando a ejecutar
+
+Segundo paso: Actualizar la lista de paquetes
+apt-get update
+  apt-get update: actualiza la lista de paquetes comando para docker ubuntu
+
+Tercer paso: Instalar un editor de texto
+apt-get install -y nano
+  apt-get install: instala un paquete comando para docker ubuntu
+  -y: confirma la instalación
+  nano: editor de texto
+
+Cuarto paso: Crear un archivo llamado hola.txt
+echo "Hola desde Docker" > hola.txt
+  echo: comando para crear un archivo
+  "Hola desde Docker": contenido del archivo
+  > hola.txt: crea el archivo hola.txt
+
+Quinto paso: Verificar el contenido del archivo
+cat hola.txt
+  cat: comando para mostrar el contenido de un archivo
+
+Sexto paso: Salir del contenedor
+exit
+
+Septimo paso: Eliminar el contenedor
+docker rm mi-ubuntu
