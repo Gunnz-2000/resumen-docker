@@ -1,0 +1,25 @@
+Se requiere crear un contenedor Docker ultraligero para una aplicación escrita en C, de manera
+que el ejecutable final se ejecute sin necesidad de incluir herramientas de compilación ni librerías
+adicionales en la imagen de producción. Para resolverlo, utiliza un Dockerfile con multi-stage builds,
+creando primero una etapa de compilación con gcc que genere un binario estático, y luego una etapa final
+mínima basada en scratch que solo contenga el ejecutable. El resultado esperado es que, al construir y ejecutar
+la imagen, el contenedor muestre correctamente el mensaje de la aplicación C en consola y que la imagen final
+tenga un tamaño drásticamente menor que la imagen completa de compilación, demotrando la eficiencia de separar
+build y runtime.
+
+Primer paso: crear archivos
+
+Segundo paso: crear imagen
+docker build -t hello-demo .
+
+
+Sin multi-stage pesaría más y el Dockerfile sería así:
+FROM gcc:latest AS builder
+
+WORKDIR /usr/src/app
+
+COPY hello.c .
+
+RUN gcc -static -o hello hello.c
+
+CMD ["/hello"]
