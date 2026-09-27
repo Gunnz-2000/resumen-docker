@@ -1,0 +1,9 @@
+# Archivos de SO
+.DS_Store
+Thumbs.db
+
+# Entornos Virtuales y Dependencias
+node_modules/
+venv/
+.env
+
