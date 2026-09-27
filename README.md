@@ -1,305 +1,121 @@
-﻿# ðŸ³ Curso de Docker â€” Apuntes y Ejercicios PrÃ¡cticos
+﻿# Curso y Apuntes de Docker 🐳
 
-> Apuntes personales y ejercicios del curso de Docker, desde conceptos bÃ¡sicos hasta CI/CD con GitHub Actions.
+Este repositorio contiene mis apuntes personales y ejemplos prácticos para aprender comenzar a aprender Docker.
 
-![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
-![Python](https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white)
-![Node.js](https://img.shields.io/badge/Node.js-339933?style=for-the-badge&logo=nodedotjs&logoColor=white)
-![Flask](https://img.shields.io/badge/Flask-000000?style=for-the-badge&logo=flask&logoColor=white)
-![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)
+## 📌 Tabla de Contenidos
 
----
-
-## ðŸ“Œ Tabla de Contenidos
-
-- [Estructura del repositorio](#-estructura-del-repositorio)
-- [Ejercicios prÃ¡cticos](#ï¸-ejercicios-prÃ¡cticos)
-- [Referencia de comandos](#-referencia-de-comandos)
-  - [Comandos bÃ¡sicos](#ï¸-comandos-bÃ¡sicos)
-  - [WSL](#-wsl-windows-subsystem-for-linux)
-  - [Dockerfile](#-dockerfile)
-  - [Docker Hub](#ï¸-docker-hub)
-  - [Redes en Docker](#-redes-en-docker)
-  - [Persistencia y datos](#-persistencia-y-gestiÃ³n-de-datos)
-  - [Docker Compose](#-docker-compose)
-  - [Multi-Stage Builds](#ï¸-multi-stage-builds-multicapas)
-  - [CI/CD con GitHub Actions](#-cicd-con-github-actions)
+- [Comandos Básicos](#comandos-básicos)
+- [WSL (Windows Subsystem for Linux)](#wsl-windows-subsystem-for-linux)
+- [Dockerfile](#dockerfile)
+- [Docker Hub](#docker-hub)
+- [Redes en Docker](#redes-en-docker)
+- [Persistencia y Gestión de Datos](#persistencia-y-gestión-de-datos)
+- [Docker Compose](#docker-compose)
+- [Multi-Stage Builds](#multi-stage-builds-multicapas)
 
 ---
 
-## ðŸ“ Estructura del repositorio
+## 🛠️ Comandos Básicos
 
-```
-curso-docker/
-â”œâ”€â”€ ejemplo1-8/       # Archivos generados durante las clases del curso
-â”œâ”€â”€ ejercicio1/       # Levantar servidor Nginx
-â”œâ”€â”€ ejercicio2/       # Contenedor Ubuntu interactivo
-â”œâ”€â”€ ejercicio3/       # Script Python con Dockerfile
-â”œâ”€â”€ ejercicio4/       # API Flask en contenedor
-â”œâ”€â”€ ejercicio5/       # API FastAPI en contenedor
-â”œâ”€â”€ ejercicio6/       # Persistencia con volÃºmenes en Ubuntu
-â”œâ”€â”€ ejercicio7/       # Persistencia de datos con MySQL + volumen
-â”œâ”€â”€ ejercicio8/       # ComunicaciÃ³n entre contenedores via red Docker
-â”œâ”€â”€ ejercicio9/       # Flask + Nginx con Docker Compose
-â”œâ”€â”€ ejercicio10/      # Flask + Redis con Docker Compose
-â”œâ”€â”€ ejercicio11/      # Node.js con Nodemon y hot reload
-â”œâ”€â”€ ejercicio12/      # CI/CD con GitHub Actions y Docker Hub
-â””â”€â”€ ejercicio13/      # Multi-Stage Build con C y scratch
-```
+Los contenedores nacen de las imágenes. Si no tenemos la imagen localmente, Docker la descarga automáticamente.
+
+- `docker run hello-world`: Corre una imagen. `docker` indica que estamos usando docker y `run` que estamos corriendo una imagen.
+- `docker ps`: Muestra todos los contenedores en ejecución.
+- `docker ps -a`: Muestra todos los contenedores, incluso si están apagados.
+- `docker images`: Lista todas las imágenes descargadas en tu sistema local.
+- `docker search nginx`: Lista todas las imágenes relacionadas a `nginx` en Docker Hub (indicando cuál es la oficial).
+- `docker pull nginx`: Descarga la imagen `nginx` desde Docker Hub a tu máquina.
+- `docker rm <id_contenedor>`: Elimina un contenedor específico.
+- `docker rmi <nombre_imagen>`: Elimina una imagen. 
+  > **Nota:** No puedes eliminar una imagen que le pertenece a un contenedor (primero debes eliminar el contenedor).
 
 ---
 
-## ðŸ‹ï¸ Ejercicios PrÃ¡cticos
+## 🐧 WSL (Windows Subsystem for Linux)
 
-Cada ejercicio tiene un archivo `.txt` con el enunciado y los pasos detallados.
-
-| # | Ejercicio | TecnologÃ­as | Concepto clave |
-|---|-----------|-------------|----------------|
-| 01 | [Servidor Nginx](./ejercicio1/) | Nginx | `docker run`, mapeo de puertos `-p` |
-| 02 | [Contenedor Ubuntu interactivo](./ejercicio2/) | Ubuntu | Modo `-it`, `apt-get`, archivos dentro del contenedor |
-| 03 | [Script Python](./ejercicio3/) | Python | `Dockerfile`, `COPY`, `CMD`, `docker build` |
-| 04 | [API con Flask](./ejercicio4/) | Python, Flask | `RUN pip install`, `EXPOSE`, `requirements.txt` |
-| 05 | [API con FastAPI](./ejercicio5/) | Python, FastAPI, Uvicorn | `EXPOSE 8000`, `uvicorn` como servidor ASGI |
-| 06 | [VolÃºmenes en Ubuntu](./ejercicio6/) | Ubuntu | Persistencia de datos, `-v`, sobrevivir a la eliminaciÃ³n del contenedor |
-| 07 | [MySQL + Volumen](./ejercicio7/) | MySQL | VolÃºmenes nombrados, `-e` para variables de entorno, `docker exec` |
-| 08 | [Redes entre contenedores](./ejercicio8/) | PostgreSQL, Alpine | `docker network create`, DNS interno de Docker, `ping` entre contenedores |
-| 09 | [Flask + Nginx (Compose)](./ejercicio9/) | Flask, Nginx | Proxy inverso, `docker-compose.yml`, `depends_on` |
-| 10 | [Flask + Redis (Compose)](./ejercicio10/) | Flask, Redis | MÃºltiples servicios, variables de entorno, contador con persistencia |
-| 11 | [Node.js + Nodemon](./ejercicio11/) | Node.js, Nodemon | Hot reload en desarrollo, bind mount del cÃ³digo local |
-| 12 | [CI/CD con GitHub Actions](./ejercicio12/) | Node.js, GitHub Actions | Pipeline automatizado, `secrets`, build y push a Docker Hub |
-| 13 | [Multi-Stage Build con C](./ejercicio13/) | C, gcc, scratch | Imagen mÃ­nima de producciÃ³n, separar build de runtime |
+- `wsl`: Entrar al subsistema de Linux desde Windows. Usa `exit` para salir.
+- `docker run --name contenedor1 hello-world`: Ejecuta un contenedor y le asigna un nombre específico. No puedes tener 2 contenedores con el mismo nombre.
+- `docker inspect <nombre_contenedor>`: Ver toda la información detallada (configuración, red, volúmenes) del contenedor.
+- `docker container prune`: Elimina todos los contenedores que estén detenidos.
+- `docker run -it ubuntu`: Ejecuta la imagen de ubuntu en modo interactivo. Se abre la terminal para interactuar con la imagen y se puede ejecutar cualquier comando de Linux. Usa `exit` para salir.
+- `docker run --name alwaysup -d ubuntu tail -f /dev/null`: Crea un contenedor de ubuntu. `-d` para que se ejecute en segundo plano (detached) y `tail -f /dev/null` para mantener el contenedor activo (evita que se cierre automáticamente).
+- `docker run -it --rm -d -p 8080:80 --name web nginx:latest`: 
+  - `-p 8080:80`: Mapeo de puertos (puerto_host : puerto_contenedor).
+  - `--rm`: Elimina el contenedor automáticamente cuando se detiene.
+  - `-d`: Segundo plano.
+- `docker stop <nombre_o_id_contenedor>`: Detiene un contenedor en ejecución.
 
 ---
 
-## ðŸ“– Referencia de Comandos
+## 📄 Dockerfile
 
-### ðŸ› ï¸ Comandos BÃ¡sicos
+Archivo de texto que contiene instrucciones que Docker usa mediante `build` para construir una imagen. Al ejecutar la imagen con `run` se obtiene un contenedor.
 
-> Los contenedores nacen de las imÃ¡genes. Si no tenemos la imagen localmente, Docker la descarga automÃ¡ticamente.
-
-| Comando | DescripciÃ³n |
-|---------|-------------|
-| `docker run hello-world` | Corre un contenedor desde la imagen `hello-world`. Si no existe, la descarga. |
-| `docker ps` | Muestra todos los contenedores **en ejecuciÃ³n**. |
-| `docker ps -a` | Muestra **todos** los contenedores, incluso los detenidos. |
-| `docker images` | Lista todas las imÃ¡genes descargadas en tu sistema local. |
-| `docker search nginx` | Busca imÃ¡genes relacionadas a `nginx` en Docker Hub. |
-| `docker pull nginx` | Descarga la imagen `nginx` desde Docker Hub. |
-| `docker rm <id>` | Elimina un contenedor especÃ­fico. |
-| `docker rmi <imagen>` | Elimina una imagen. No puedes eliminar la imagen de un contenedor existente. |
-| `docker stop <nombre_o_id>` | Detiene un contenedor en ejecuciÃ³n. |
-| `docker container prune` | Elimina **todos** los contenedores detenidos. |
-| `docker inspect <nombre>` | Muestra informaciÃ³n detallada (red, volÃºmenes, config) de un contenedor. |
+- **Sintaxis básica**: `docker run [opciones] IMAGEN [COMANDO] [ARGS...]`
+- `docker build -t ubuntu-new .`: Construye la imagen a través del archivo Dockerfile. El `.` indica que el archivo está en el directorio actual. `-t` le asigna el nombre (etiqueta) `ubuntu-new`.
+- `docker run -it -p 7070:70 ubuntu-new /bin/bash`: Inicia el contenedor y `/bin/bash` permite obtener una terminal interactiva con bash.
+- `docker run -it -p 7080:80 ubuntu-new`: Ejecuta la imagen. Los comandos adicionales no sobreescriben la instrucción `CMD` del Dockerfile.
+- `docker exec -it my-container ls /usr/share/nginx/html`: `docker exec` entra a un contenedor que ya está corriendo para ejecutar un comando (en este caso listar archivos).
+- `docker run my-image1 echo "mensaje extra"`: Ejecuta un comando extra, ideal para sobreescribir la instrucción `CMD` del Dockerfile.
 
 ---
 
-### ðŸ§ WSL (Windows Subsystem for Linux)
+## ☁️ Docker Hub
 
-```bash
-wsl          # Entrar al subsistema Linux en Windows
-exit         # Salir del subsistema
-```
+Repositorio oficial y registro de imágenes en Docker.
 
-**Flags Ãºtiles para `docker run`:**
-
-| Flag | DescripciÃ³n |
-|------|-------------|
-| `--name <nombre>` | Asigna un nombre al contenedor. No puede haber dos iguales. |
-| `-it` | Modo interactivo con terminal (ideal para Ubuntu, bash, etc.). |
-| `-d` | Detached: ejecuta en segundo plano sin bloquear la terminal. |
-| `-p 8080:80` | Mapeo de puertos: `puerto_host:puerto_contenedor`. |
-| `--rm` | Elimina el contenedor automÃ¡ticamente cuando se detiene. |
-
-```bash
-docker run --name alwaysup -d ubuntu tail -f /dev/null    # Contenedor Ubuntu siempre activo
-docker run -it --rm -d -p 8080:80 --name web nginx:latest # Nginx con auto-limpieza al detenerlo
-```
+- `docker login`: Iniciar sesión en tu cuenta de Docker Hub desde la terminal.
+- `docker tag ubuntu-new jhimysp/ubuntu-new-repo1`: Crea un alias o etiqueta para una imagen existente (`usuario/nombre_repo`).
+- `docker push jhimysp/ubuntu-new-repo1`: Sube tu imagen local a Docker Hub, dentro de tu cuenta.
+- `docker logs -f my-test-container`: Muestra la salida de consola (logs) de un contenedor. `-f` lo mantiene en tiempo real (`Ctrl + C` para salir).
+- `docker stats my-test-container`: Muestra estadísticas de uso de recursos (CPU, RAM) en tiempo real (`Ctrl + C` para salir).
 
 ---
 
-### ðŸ“„ Dockerfile
+## 🌐 Redes en Docker
 
-> Archivo de texto con instrucciones que Docker usa para construir una imagen. Una imagen ejecutada con `run` se convierte en un contenedor.
+Permiten la comunicación entre contenedores y el mundo exterior. Puedes crear tus propias redes personalizadas para aislar tus servicios.
 
-**Instrucciones clave:**
-
-| InstrucciÃ³n | DescripciÃ³n |
-|-------------|-------------|
-| `FROM <imagen>` | Imagen base sobre la que se construye. |
-| `WORKDIR /app` | Define el directorio de trabajo dentro del contenedor. |
-| `COPY <src> <dst>` | Copia archivos del host al contenedor. |
-| `RUN <comando>` | Ejecuta un comando durante la **construcciÃ³n** de la imagen. |
-| `EXPOSE <puerto>` | Documenta el puerto que usarÃ¡ el contenedor (no lo publica solo). |
-| `CMD ["cmd", "arg"]` | Comando por defecto al iniciar el contenedor (puede sobreescribirse). |
-| `ENTRYPOINT [...]` | Comando fijo al iniciar el contenedor (mÃ¡s rÃ­gido que `CMD`). |
-
-```bash
-docker build -t mi-imagen .                           # Construir imagen (. = directorio actual)
-docker run -it -p 7080:80 mi-imagen                   # Ejecutar contenedor con mapeo de puertos
-docker run -it mi-imagen /bin/bash                    # Abrir terminal bash dentro del contenedor
-docker exec -it mi-container ls /usr/share/nginx/html # Ejecutar comando en un contenedor corriendo
-docker run mi-imagen echo "mensaje"                   # Sobreescribir CMD del Dockerfile
-```
+- `docker network ls`: Lista todas las redes de Docker (la predeterminada es `bridge`).
+- `docker network create my-network`: Crea una red personalizada.
+- `docker network inspect my-network`: Inspecciona los detalles de una red.
+- `docker run -d --name my-container-5 --network my-network nginx:latest`: Crea y arranca un contenedor conectado a la red `my-network`.
+- `docker network disconnect my-network my-container-6`: Desconecta un contenedor de una red.
+- `docker network rm my-network`: Elimina la red `my-network`.
 
 ---
 
-### â˜ï¸ Docker Hub
+## 💾 Persistencia y Gestión de Datos
 
-> Registro oficial de imÃ¡genes Docker. Cualquier imagen que subas puede ser descargada desde cualquier mÃ¡quina del mundo.
+Si eliminas un contenedor, todos sus datos internos se pierden. Por eso existen mecanismos de persistencia:
+1. **Volúmenes**: Espacio de almacenamiento gestionado completamente por Docker.
+2. **Bind mounts**: Montas una carpeta/archivo de tu máquina (host) directamente al contenedor. (Útil para desarrollo).
 
-```bash
-docker login                                 # Iniciar sesiÃ³n en Docker Hub
-docker tag mi-imagen usuario/nombre-repo     # Crear alias con formato usuario/repo
-docker push usuario/nombre-repo              # Subir imagen a Docker Hub
-docker logs -f mi-contenedor                 # Ver logs en tiempo real (Ctrl+C para salir)
-docker stats mi-contenedor                   # Ver uso de CPU y RAM en tiempo real
-```
-
----
-
-### ðŸŒ Redes en Docker
-
-> Permiten la comunicaciÃ³n entre contenedores y el mundo exterior. Docker asigna DNS interno automÃ¡ticamente: los contenedores se pueden referenciar por su `--name` dentro de la misma red.
-
-```bash
-docker network ls                                         # Listar redes (predeterminada: bridge)
-docker network create mi-red                              # Crear red personalizada
-docker network inspect mi-red                             # Ver detalles de la red
-docker run -d --name srv --network mi-red nginx:latest    # Conectar contenedor a la red
-docker network disconnect mi-red mi-contenedor            # Desconectar contenedor de una red
-docker network rm mi-red                                  # Eliminar la red
-```
+- `docker run -d --name my-mongodb-container -v "/mongodb_data:/data/db" mongo:latest`: **Bind Mount**. Monta la carpeta `/mongodb_data` de tu PC en `/data/db` del contenedor.
+- `docker exec -it my-mongodb-container bash`: Entrar al contenedor de mongo. `mongosh` para interactuar con la base de datos.
+- `docker run --name mysql-container -v "/mysql_db:/var/lib/mysql" -e MYSQL_ROOT_PASSWORD=1234 -d mysql`: Inicia MySQL con persistencia y define la contraseña root mediante una variable de entorno (`-e`).
+- `docker volume ls`: Lista los volúmenes de Docker.
+- `docker volume create db_mongo`: Crea un volumen gestionado por Docker.
+- `docker run -d --name mongocontainer --mount src=db_mongo,dst=/data/db mongo`: Inicia un contenedor MongoDB usando el volumen de Docker llamado `db_mongo`.
 
 ---
 
-### ðŸ’¾ Persistencia y GestiÃ³n de Datos
+## 🐙 Docker Compose
 
-> Si eliminas un contenedor, sus datos internos se pierden. Existen dos mecanismos para persistirlos:
+Herramienta para definir y ejecutar aplicaciones Docker de múltiples contenedores usando un archivo `docker-compose.yml`.
 
-| Mecanismo | Sintaxis | DescripciÃ³n | Uso recomendado |
-|-----------|----------|-------------|-----------------|
-| **Volumen** | `-v nombre:/ruta` | Almacenamiento gestionado por Docker, vive fuera del contenedor. | ProducciÃ³n |
-| **Bind Mount** | `-v /ruta/host:/ruta/contenedor` | Carpeta de tu PC montada directamente en el contenedor. | Desarrollo local |
-
-```bash
-# VolÃºmenes
-docker volume ls                                                       # Listar volÃºmenes
-docker volume create mi-volumen                                        # Crear volumen
-docker run -d --name mongo --mount src=mi-volumen,dst=/data/db mongo  # Usar volumen con --mount
-
-# Bind Mount
-docker run -d --name mongodb -v "/datos:/data/db" mongo:latest        # Montar carpeta local
-
-# Bases de datos con persistencia
-docker run --name mysql -v "/mysql_db:/var/lib/mysql" -e MYSQL_ROOT_PASSWORD=1234 -d mysql
-docker exec -it mysql bash    # Entrar al contenedor MySQL
-mysql -u root -p              # Abrir consola MySQL dentro del contenedor
-
-docker exec -it mongodb bash  # Entrar al contenedor MongoDB
-mongosh                       # Abrir consola MongoDB
-```
+- `docker compose up -d`: Levanta todos los servicios definidos en el archivo, creándolos y arrancándolos en segundo plano.
+- `docker compose down`: Detiene y elimina todos los contenedores y redes creados por `compose up`.
+- `docker compose stop db`: Detiene solo el servicio `db` sin eliminarlo.
+- `docker compose rm db`: Elimina el contenedor del servicio `db` previamente detenido.
 
 ---
 
-### ðŸ™ Docker Compose
+## 🏗️ Multi-Stage Builds (Multicapas)
 
-> Herramienta para definir y levantar aplicaciones de **mÃºltiples contenedores** usando un archivo `docker-compose.yml`. Cada servicio es un contenedor independiente que se puede comunicar con los demÃ¡s por nombre.
+Técnica de optimización en los `Dockerfile`.
+Cuando construyes una imagen, necesitas herramientas de compilación, pero esas herramientas no se necesitan en producción. 
 
-```bash
-docker compose up -d          # Levantar todos los servicios en segundo plano
-docker compose up --build     # Reconstruir imÃ¡genes y levantar servicios
-docker compose down           # Detener y eliminar contenedores y redes
-docker compose stop db        # Detener solo el servicio 'db' (sin eliminarlo)
-docker compose rm db          # Eliminar el contenedor del servicio 'db'
-```
-
-**Estructura bÃ¡sica de `docker-compose.yml`:**
-
-```yaml
-services:
-  web:
-    build: ./app           # Construye desde un Dockerfile local
-    ports:
-      - "5000:5000"
-    environment:
-      - REDIS_HOST=redis   # Variable de entorno accesible dentro del contenedor
-    depends_on:
-      - redis              # Espera a que 'redis' inicie primero
-
-  redis:
-    image: redis:7.2-alpine
-    volumes:
-      - redis_data:/data   # Volumen para persistencia de datos
-
-volumes:
-  redis_data:              # DeclaraciÃ³n del volumen nombrado
-```
-
----
-
-### ðŸ—ï¸ Multi-Stage Builds (Multicapas)
-
-> TÃ©cnica de optimizaciÃ³n para imÃ¡genes de producciÃ³n. Divide el `Dockerfile` en etapas: una pesada para compilar y una mÃ­nima para producciÃ³n. **Las etapas intermedias se descartan automÃ¡ticamente.**
-
-```dockerfile
-# Etapa 1: CompilaciÃ³n (imagen pesada con todas las herramientas)
-FROM gcc:latest AS builder
-WORKDIR /app
-COPY hello.c .
-RUN gcc -static -o hello hello.c
-
-# Etapa 2: ProducciÃ³n (imagen mÃ­nima, solo contiene el ejecutable final)
-FROM scratch
-COPY --from=builder /app/hello .
-CMD ["/hello"]
-```
-
-| Etapa | Imagen usada | Contiene |
-|-------|-------------|---------|
-| Build | `gcc:latest` (~1.2 GB) | Compilador, herramientas, cÃ³digo fuente |
-| Final | `scratch` (~0 MB) | Solo el binario compilado |
-
----
-
-### ðŸš€ CI/CD con GitHub Actions
-
-> Pipeline automÃ¡tico que construye y publica la imagen en Docker Hub cada vez que se hace `push` a la rama `main`. Automatiza el ciclo completo: cÃ³digo â†’ imagen â†’ registro.
-
-**Paso 1 â€” Configurar secrets en GitHub** (`Settings > Secrets and variables > Actions`):
-
-| Secret | Valor |
-|--------|-------|
-| `DOCKERHUB_USERNAME` | Tu usuario de Docker Hub |
-| `DOCKERHUB_TOKEN` | Token de acceso generado en Docker Hub (no tu contraseÃ±a) |
-
-**Paso 2 â€” Definir el workflow** (`.github/workflows/docker.yml`):
-
-```yaml
-name: Docker CI
-on:
-  push:
-    branches: ["main"]
-
-jobs:
-  build-and-push:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout cÃ³digo
-        uses: actions/checkout@v4
-
-      - name: Login en Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Build de la imagen
-        run: docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/mi-app:latest .
-
-      - name: Push a Docker Hub
-        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/mi-app:latest
-```
-
----
-
-*Apuntes tomados durante el curso de Docker. Cada carpeta de ejercicio contiene el enunciado en un `.txt` y la soluciÃ³n paso a paso con los archivos correspondientes.*
+Divides el `Dockerfile` en varias etapas (`FROM ... AS nombre`):
+1. **Etapa de build**: Usa una imagen pesada con todas las herramientas y compila el proyecto.
+2. **Etapa final**: Usa una imagen ligera (como Alpine o distroless) y copia solo el artefacto resultante de la etapa anterior. Las etapas intermedias se descartan, resultando en una imagen final muy pequeña y segura.
